@@ -1,0 +1,7 @@
+{
+	"files.associations": {
+		"*.ts": "typescript",
+		"string.h": "c"
+	},
+	"C_Cpp.errorSquiggles": "disabled"
+}
