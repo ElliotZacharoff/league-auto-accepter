@@ -1,17 +1,17 @@
 #include <stdio.h>
 #include <string.h>
 
-/*struct Ban // Will use later for determining ranking and also selecting champion
+struct Ban // Will use later for determining ranking and also selecting champion
 {
-    int ranking;
-    char[256] name;
+    int priorityRanking;
+    char name[256];
 };
 
 struct Champion
 {
-    int ranking;
-    char[256] name;
-}*/
+    int priorityRanking;
+    char name[256];
+};
 
 int main()
 {
@@ -57,27 +57,40 @@ int main()
     }
     fclose(settings);
 
+    struct Champion champs[5];
+    struct Ban bans_[5];
+
     int rankBans = 1;
     int rankChampions = 1;
 
     // Split bans by ','
-    printf("Bans:\n");
     char *token = strtok(bans, ",");
-    while (token != NULL)
+    while (token != NULL && rankBans <= 5)
     {
-        printf("- %s [ranking: %d]\n", token, rankBans);
+        strcpy(bans_[rankBans - 1].name, token);
+        bans_[rankBans - 1].priorityRanking = rankBans;
         token = strtok(NULL, ",");
-        rankBans += 1;
+        rankBans++;
     }
 
     // Split champions by ','
-    printf("Champions:\n");
     token = strtok(champions, ",");
-    while (token != NULL)
+    while (token != NULL && rankChampions <= 5)
     {
-        printf("- %s [ranking: %d]\n", token, rankChampions);
+        strcpy(champs[rankChampions - 1].name, token);
+        champs[rankChampions - 1].priorityRanking = rankChampions;
         token = strtok(NULL, ",");
-        rankChampions += 1;
+        rankChampions++;
+    }
+    printf("BANS:\n");
+    for (int i = 0; i < rankBans - 1; i++)
+    {
+        printf("Champ (ban): %s, Ranking: %d\n", bans_[i].name, bans_[i].priorityRanking);
+    }
+    printf("CHAMPIONS:\n");
+    for (int i = 0; i < rankChampions - 1; i++)
+    {
+        printf("Champ: %s, Ranking: %d\n", champs[i].name, champs[i].priorityRanking);
     }
 
     return 0;
