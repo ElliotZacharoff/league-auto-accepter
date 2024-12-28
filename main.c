@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-
+//go get candy
 /*struct Ban
 {
     int ranking;
