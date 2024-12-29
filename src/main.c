@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include "../headers/screen.h"
 
 struct Ban // Will use later for determining ranking and also selecting champion
 {
@@ -92,6 +93,6 @@ int main()
     {
         printf("Champ: %s, Ranking: %d\n", champs[i].name, champs[i].priorityRanking);
     }
-
+    // screen(); Test
     return 0;
 }
