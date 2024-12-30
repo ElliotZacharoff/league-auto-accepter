@@ -2,30 +2,21 @@
 #include <string.h>
 #include "../headers/screen.h"
 #include "../headers/tokenize.h"
+#include "../headers/createfile.h"
 
 int main()
 {
     FILE *settings;
-
-    settings = fopen("settings.txt", "r");
+    char FILE_NAME[256] = "settings.txt";
+    char INITIAL_FILE_CONTENTS[256] = "Bans: \nChampions: \n";
     if (settings == NULL)
     {
-        settings = fopen("settings.txt", "w");
-
-        fprintf(settings, "Bans: \nChampions: ");
-        fclose(settings);
-
-        settings = fopen("settings.txt", "r"); // Reopening
-        if (settings == NULL)
-        {
-            printf("Unable to reopen");
-            return 1;
-        }
+        createfile(settings, FILE_NAME, INITIAL_FILE_CONTENTS);
     }
-    char buffer[256];
 
-    char b[256] = "";
-    char c[256] = "";
+    settings = fopen(FILE_NAME, "r");
+
+    char buffer[256], b[256], c[256];
 
     while (fscanf(settings, "%[^\n]\n", buffer) != EOF)
     {
@@ -42,9 +33,7 @@ int main()
     }
     fclose(settings);
 
-    struct Token champions[5];
-    struct Token bans[5];
-
+    struct Token champions[5], bans[5];
     char t[2] = {',', '\0'};
 
     // This is gonna correspond with the ranking so use this to loop through the champs/bans

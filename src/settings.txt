@@ -1,2 +1,2 @@
-Bans: Renekton,Darius,Annie
-Champions: Aphelios,Gankplank
+Bans: Darius,Anki,Varus
+Champions: Aphelios,Annie
