@@ -1,9 +1,10 @@
 #include <stdio.h>
+#include <string.h>
 #include "../headers/screen.h"
 
-void screen()
+void screen(const char *input)
 {
-    printf("Will be doing the interacting with window thing inside here");
+    printf("User wrote: %s\n", input);
     /*
         Wanted to split up the files and make it more organized.
         Thinking of using a windows library like WinAPI (literally #include <windows.h>)
