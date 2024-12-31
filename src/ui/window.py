@@ -1,52 +1,49 @@
 import ctypes
+
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 
-backend = ctypes.CDLL("../libbackend.so")
+backend = ctypes.CDLL("../uiserver.so")
 
-backend.screen.argtypes = [ctypes.c_char_p] # parameter type(s)
-backend.screen.restype = None # restype = return type
+backend.isValidChamp.argtypes = [ctypes.c_char_p] # parameter type(s)
+backend.isValidChamp.restype = None # restype = return type
 
-matches = []
-filePath = "../champions.txt"
-
-def compare_to_file(string: str):
-    with open(filePath, "r") as f:
-        lines = f.readlines()
-        for line in lines:
-            if string == line:
-                matches.append(string)
-
-class Window(QMainWindow):
+class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+
         self.setWindowTitle("League auto-accepter")
-        self.setGeometry(200, 540, 200, 200)
+        self.setGeometry(100, 100, 400, 300)
 
-        widget = QWidget()
-        self.setCentralWidget(widget)
+        cW = QWidget()
+        self.setCentralWidget(cW)
 
-        layout = QVBoxLayout()
-        widget.setLayout(layout)
+        gB = QGroupBox("Button Groupbox")
+        gB_layout = QVBoxLayout(cW)
+        gB.setLayout(gB_layout)
 
-        self.input_field = QLineEdit(self)
-        self.input_field.setPlaceholderText("Enter something...")
-        layout.addWidget(self.input_field)
+        self.tb = QLineEdit(self)
+        self.tb.setPlaceholderText("Champion...")
+        gB_layout.addWidget(self.tb)
 
+        # Submit button
+        self.submits = []
         self.submit_button = QPushButton("Send to C Backend", self)
         self.submit_button.clicked.connect(self.on_submit)
-        layout.addWidget(self.submit_button)
+        gB_layout.addWidget(self.submit_button)
 
-        self.feedback_label = QLabel("", self)
-        layout.addWidget(self.feedback_label)
+        # Feedback label
+        self.fbStr = QLabel("", self)
+        gB_layout.addWidget(self.fbStr)
 
-
+    @pyqtSlot()
     def on_submit(self):
-        userInput = self.input_field.text()
+        subn = len(self.submits)
+        if subn > 5:
+            pass
+        userInput = self.tb.text()
+        self.submits.append(userInput)
+        backend.isValidChamp(userInput.encode('utf-8'))
 
-        compare_to_file(userInput)
-        backend.screen(userInput.encode('utf-8'))
-
-        self.feedback_label.setText(f"HELLO")
-
-    def handle_input(self):
-        pass
+        self.fbStr.setText(f"Added {userInput.encode('utf-8')} ({subn}/5)")
