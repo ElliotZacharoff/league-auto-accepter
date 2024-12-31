@@ -2,7 +2,7 @@
 #include <string.h>
 #include "../headers/screen.h"
 
-void screen(FILE *const char *input)
+void screen(const char *input)
 {
     printf("User wrote: %s\n", input);
     /*

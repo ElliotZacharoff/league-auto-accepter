@@ -6,11 +6,21 @@ backend = ctypes.CDLL("../libbackend.so")
 backend.screen.argtypes = [ctypes.c_char_p] # parameter type(s)
 backend.screen.restype = None # restype = return type
 
+matches = []
+filePath = "../champions.txt"
+
+def compare_to_file(string: str):
+    with open(filePath, "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            if string == line:
+                matches.append(string)
+
 class Window(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("League auto-accepter")
-        self.setGeometry(960, 540, 800, 800)
+        self.setGeometry(200, 540, 200, 200)
 
         widget = QWidget()
         self.setCentralWidget(widget)
@@ -29,9 +39,14 @@ class Window(QMainWindow):
         self.feedback_label = QLabel("", self)
         layout.addWidget(self.feedback_label)
 
+
     def on_submit(self):
-        user_input = self.input_field.text()
+        userInput = self.input_field.text()
 
-        backend.screen(user_input.encode('utf-8'))
+        compare_to_file(userInput)
+        backend.screen(userInput.encode('utf-8'))
 
-        self.feedback_label.setText(f"C")
+        self.feedback_label.setText(f"HELLO")
+
+    def handle_input(self):
+        pass
