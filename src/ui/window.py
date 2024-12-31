@@ -7,7 +7,7 @@ from PyQt5.QtCore import *
 backend = ctypes.CDLL("../uiserver.so")
 
 backend.isValidChamp.argtypes = [ctypes.c_char_p] # parameter type(s)
-backend.isValidChamp.restype = None # restype = return type
+backend.isValidChamp.restype = int # restype = return type
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -19,31 +19,42 @@ class MainWindow(QMainWindow):
         cW = QWidget()
         self.setCentralWidget(cW)
 
-        gB = QGroupBox("Button Groupbox")
-        gB_layout = QVBoxLayout(cW)
+        main_layout = QVBoxLayout(cW)
+
+        gB = QGroupBox("Enter a champion")
+        gB_layout = QVBoxLayout()
         gB.setLayout(gB_layout)
+        main_layout.addWidget(gB)
 
         self.tb = QLineEdit(self)
         self.tb.setPlaceholderText("Champion...")
         gB_layout.addWidget(self.tb)
 
-        # Submit button
         self.submits = []
         self.submit_button = QPushButton("Send to C Backend", self)
         self.submit_button.clicked.connect(self.on_submit)
         gB_layout.addWidget(self.submit_button)
 
-        # Feedback label
         self.fbStr = QLabel("", self)
         gB_layout.addWidget(self.fbStr)
 
     @pyqtSlot()
     def on_submit(self):
-        subn = len(self.submits)
-        if subn > 5:
-            pass
         userInput = self.tb.text()
-        self.submits.append(userInput)
-        backend.isValidChamp(userInput.encode('utf-8'))
 
-        self.fbStr.setText(f"Added {userInput.encode('utf-8')} ({subn}/5)")
+        if (userInput == ""):
+            return
+
+        subn = len(self.submits)+1
+        self.submits.append(userInput)
+        is_valid = backend.isValidChamp(userInput.encode('utf-8'))
+        if subn >= 5:
+            self.fbStr.setText("Maximum submissions reached! (5/5)")
+            self.submit_button.setEnabled(False)
+            return
+        if is_valid == 1:
+            self.fbStr.setText(f"Added {userInput} ({subn}/5)")
+            self.tb.setText("")
+        else:
+            self.fbStr.setText(f"{userInput} is not a valid champion")
+            self.submits.pop()

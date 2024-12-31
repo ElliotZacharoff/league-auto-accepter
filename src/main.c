@@ -7,7 +7,7 @@
 int main()
 {
     FILE *settings;
-    char FILE_NAME[256] = "settings.txt";
+    char FILE_NAME[256] = "../config/settings.txt";
     char INITIAL_FILE_CONTENTS[256] = "Bans: \nChampions: \n";
     if (settings == NULL)
     {
