@@ -1,6 +1,6 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
-void screen();
+void screen(const char *input);
 
 #endif
